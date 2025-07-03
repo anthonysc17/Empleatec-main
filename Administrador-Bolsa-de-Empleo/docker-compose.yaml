@@ -1,0 +1,36 @@
+version: "3.8"
+
+services:
+  frontend:
+    build:
+      context: ./EmpleaTec_Admin
+      dockerfile: Dockerfile
+    ports:
+      - "5173:5173"
+    working_dir: /app
+    volumes:
+      - ./EmpleaTec_Admin:/app
+      - /app/node_modules
+    command: npm run dev
+    depends_on:
+      - backend
+    networks:
+      - empleatec-net
+
+  backend:
+    build:
+      context: ./EmpleaTec_Api_Admin
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    working_dir: /usr/src/app
+    volumes:
+      - ./EmpleaTec_Api_Admin:/usr/src/app
+      - /usr/src/app/node_modules
+    command: node server.js
+    networks:
+      - empleatec-net
+
+networks:
+  empleatec-net:
+    driver: bridge
